@@ -58,22 +58,20 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define BOOT_Pin GPIO_PIN_8
-#define BOOT_GPIO_Port GPIOB
-#define HDMI_I2C_EN_Pin GPIO_PIN_0
-#define HDMI_I2C_EN_GPIO_Port GPIOA
-#define HDMI_5V_EN_Pin GPIO_PIN_1
-#define HDMI_5V_EN_GPIO_Port GPIOA
-#define HDMI_5V_IN_Pin GPIO_PIN_4
+#define HDMI_HPD_EN_Pin GPIO_PIN_8
+#define HDMI_HPD_EN_GPIO_Port GPIOB
+#define HDMI_5V_IN_Pin GPIO_PIN_0
 #define HDMI_5V_IN_GPIO_Port GPIOA
+#define HDMI_HPD_IN_Pin GPIO_PIN_1
+#define HDMI_HPD_IN_GPIO_Port GPIOA
+#define HDMI_5V_EN_Pin GPIO_PIN_4
+#define HDMI_5V_EN_GPIO_Port GPIOA
 #define HDMI_CEC_IN_Pin GPIO_PIN_5
 #define HDMI_CEC_IN_GPIO_Port GPIOA
-#define HDMI_HPD_EN_Pin GPIO_PIN_6
-#define HDMI_HPD_EN_GPIO_Port GPIOA
-#define HDMI_HPD_IN_Pin GPIO_PIN_7
-#define HDMI_HPD_IN_GPIO_Port GPIOA
-#define LED0_Pin GPIO_PIN_1
-#define LED0_GPIO_Port GPIOB
+#define HMI_LED1_Pin GPIO_PIN_6
+#define HMI_LED1_GPIO_Port GPIOA
+#define HMI_LED0_Pin GPIO_PIN_7
+#define HMI_LED0_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

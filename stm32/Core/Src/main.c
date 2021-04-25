@@ -100,7 +100,8 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
-
+  extern void WallySetup(void);
+  WallySetup();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -110,6 +111,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    extern void WallyLoop(void);
+    WallyLoop();
   }
   /* USER CODE END 3 */
 }
@@ -292,23 +295,17 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, HDMI_I2C_EN_Pin|HDMI_5V_EN_Pin|HDMI_HPD_EN_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(HDMI_HPD_EN_GPIO_Port, HDMI_HPD_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, HDMI_5V_EN_Pin|HMI_LED1_Pin|HMI_LED0_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : BOOT_Pin */
-  GPIO_InitStruct.Pin = BOOT_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(BOOT_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : HDMI_I2C_EN_Pin HDMI_5V_EN_Pin HDMI_HPD_EN_Pin */
-  GPIO_InitStruct.Pin = HDMI_I2C_EN_Pin|HDMI_5V_EN_Pin|HDMI_HPD_EN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  /*Configure GPIO pin : HDMI_HPD_EN_Pin */
+  GPIO_InitStruct.Pin = HDMI_HPD_EN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(HDMI_HPD_EN_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : HDMI_5V_IN_Pin HDMI_HPD_IN_Pin */
   GPIO_InitStruct.Pin = HDMI_5V_IN_Pin|HDMI_HPD_IN_Pin;
@@ -316,12 +313,18 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LED0_Pin */
-  GPIO_InitStruct.Pin = LED0_Pin;
+  /*Configure GPIO pins : HDMI_5V_EN_Pin HMI_LED1_Pin HMI_LED0_Pin */
+  GPIO_InitStruct.Pin = HDMI_5V_EN_Pin|HMI_LED1_Pin|HMI_LED0_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED0_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB1 */
+  GPIO_InitStruct.Pin = GPIO_PIN_1;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 

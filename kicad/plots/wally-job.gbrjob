@@ -7,7 +7,7 @@
       "Application": "Pcbnew",
       "Version":     "5.1.9-73d0e3b20d~88~ubuntu20.04.1"
     },
-    "CreationDate":  "2021-04-10T19:31:35+02:00"
+    "CreationDate":  "2021-04-24T16:55:15+02:00"
   },
   "GeneralSpecs":
   {
@@ -15,12 +15,12 @@
     {
       "Name": "wally",
       "GUID": "77616c6c-792e-46b6-9963-61645f706362",
-      "Revision": "v1.00"
+      "Revision": "v1.01"
     },
     "Size":
     {
       "X": 50.050,
-      "Y": 30.050
+      "Y": 20.050
     },
     "LayerNumber": 4,
     "BoardThickness":  1.600
