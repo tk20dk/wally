@@ -23,6 +23,8 @@ private:
   void PrintCecMessage( uint8_t const* const Msg, uint32_t const Length );
 
 private:
+  bool Flag5v;
+  bool FlagHPD;
   bool CecRxFlag;
   bool CecTxFlag;
   bool CecErrorFlag;
