@@ -122,6 +122,7 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+  RCC_CRSInitTypeDef RCC_CRSInitStruct = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -155,6 +156,19 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+  /** Enable the SYSCFG APB clock
+  */
+  __HAL_RCC_CRS_CLK_ENABLE();
+  /** Configures CRS
+  */
+  RCC_CRSInitStruct.Prescaler = RCC_CRS_SYNC_DIV1;
+  RCC_CRSInitStruct.Source = RCC_CRS_SYNC_SOURCE_USB;
+  RCC_CRSInitStruct.Polarity = RCC_CRS_SYNC_POLARITY_RISING;
+  RCC_CRSInitStruct.ReloadValue = __HAL_RCC_CRS_RELOADVALUE_CALCULATE(48000000,1000);
+  RCC_CRSInitStruct.ErrorLimitValue = 34;
+  RCC_CRSInitStruct.HSI48CalibrationValue = 32;
+
+  HAL_RCCEx_CRSConfig(&RCC_CRSInitStruct);
 }
 
 /**
@@ -176,8 +190,8 @@ static void MX_HDMI_CEC_Init(void)
   hcec.Init.SignalFreeTime = CEC_DEFAULT_SFT;
   hcec.Init.Tolerance = CEC_STANDARD_TOLERANCE;
   hcec.Init.BRERxStop = CEC_RX_STOP_ON_BRE;
-  hcec.Init.BREErrorBitGen = CEC_BRE_ERRORBIT_NO_GENERATION;
-  hcec.Init.LBPEErrorBitGen = CEC_LBPE_ERRORBIT_NO_GENERATION;
+  hcec.Init.BREErrorBitGen = CEC_BRE_ERRORBIT_GENERATION;
+  hcec.Init.LBPEErrorBitGen = CEC_LBPE_ERRORBIT_GENERATION;
   hcec.Init.BroadcastMsgNoErrorBitGen = CEC_BROADCASTERROR_ERRORBIT_GENERATION;
   hcec.Init.SignalFreeTimeOption = CEC_SFT_START_ON_TXSOM;
   hcec.Init.ListenMode = CEC_FULL_LISTENING_MODE;
@@ -246,7 +260,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(HDMI_HPD_EN_GPIO_Port, HDMI_HPD_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, HDMI_5V_EN_Pin|HMI_LED1_Pin|HMI_LED0_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, HDMI_5V_EN_Pin|LED_RED_Pin|LED_GREEN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : HDMI_HPD_EN_Pin */
   GPIO_InitStruct.Pin = HDMI_HPD_EN_Pin;
@@ -255,10 +269,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(HDMI_HPD_EN_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PF0 PF1 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  /*Configure GPIO pins : I2C1_SDA_Pin I2C1_SCL_Pin */
+  GPIO_InitStruct.Pin = I2C1_SDA_Pin|I2C1_SCL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
   /*Configure GPIO pins : HDMI_5V_IN_Pin HDMI_HPD_IN_Pin */
@@ -267,8 +281,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : HDMI_5V_EN_Pin HMI_LED1_Pin HMI_LED0_Pin */
-  GPIO_InitStruct.Pin = HDMI_5V_EN_Pin|HMI_LED1_Pin|HMI_LED0_Pin;
+  /*Configure GPIO pins : HDMI_5V_EN_Pin LED_RED_Pin LED_GREEN_Pin */
+  GPIO_InitStruct.Pin = HDMI_5V_EN_Pin|LED_RED_Pin|LED_GREEN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -279,6 +293,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 
 }
 

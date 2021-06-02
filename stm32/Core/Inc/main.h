@@ -60,6 +60,12 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define HDMI_HPD_EN_Pin GPIO_PIN_8
 #define HDMI_HPD_EN_GPIO_Port GPIOB
+#define I2C1_SDA_Pin GPIO_PIN_0
+#define I2C1_SDA_GPIO_Port GPIOF
+#define I2C1_SDA_EXTI_IRQn EXTI0_1_IRQn
+#define I2C1_SCL_Pin GPIO_PIN_1
+#define I2C1_SCL_GPIO_Port GPIOF
+#define I2C1_SCL_EXTI_IRQn EXTI0_1_IRQn
 #define HDMI_5V_IN_Pin GPIO_PIN_0
 #define HDMI_5V_IN_GPIO_Port GPIOA
 #define HDMI_HPD_IN_Pin GPIO_PIN_1
@@ -68,10 +74,10 @@ void Error_Handler(void);
 #define HDMI_5V_EN_GPIO_Port GPIOA
 #define HDMI_CEC_IN_Pin GPIO_PIN_5
 #define HDMI_CEC_IN_GPIO_Port GPIOA
-#define HMI_LED1_Pin GPIO_PIN_6
-#define HMI_LED1_GPIO_Port GPIOA
-#define HMI_LED0_Pin GPIO_PIN_7
-#define HMI_LED0_GPIO_Port GPIOA
+#define LED_RED_Pin GPIO_PIN_6
+#define LED_RED_GPIO_Port GPIOA
+#define LED_GREEN_Pin GPIO_PIN_7
+#define LED_GREEN_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
