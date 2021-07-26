@@ -19,7 +19,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "usb_device.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -45,6 +44,8 @@ CEC_HandleTypeDef hcec;
 
 UART_HandleTypeDef huart2;
 
+PCD_HandleTypeDef hpcd_USB_FS;
+
 uint8_t cec_receive_buffer[16];
 /* USER CODE BEGIN PV */
 
@@ -55,6 +56,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_HDMI_CEC_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_USB_PCD_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -94,9 +96,9 @@ int main(void)
   MX_GPIO_Init();
   MX_HDMI_CEC_Init();
   MX_USART2_UART_Init();
-  MX_USB_DEVICE_Init();
+  MX_USB_PCD_Init();
   /* USER CODE BEGIN 2 */
-  extern void WallySetup(void);
+  extern void WallySetup( void );
   WallySetup();
   /* USER CODE END 2 */
 
@@ -107,7 +109,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    extern void WallyLoop(void);
+    extern void WallyLoop( void );
     WallyLoop();
   }
   /* USER CODE END 3 */
@@ -190,8 +192,8 @@ static void MX_HDMI_CEC_Init(void)
   hcec.Init.SignalFreeTime = CEC_DEFAULT_SFT;
   hcec.Init.Tolerance = CEC_STANDARD_TOLERANCE;
   hcec.Init.BRERxStop = CEC_RX_STOP_ON_BRE;
-  hcec.Init.BREErrorBitGen = CEC_BRE_ERRORBIT_GENERATION;
-  hcec.Init.LBPEErrorBitGen = CEC_LBPE_ERRORBIT_GENERATION;
+  hcec.Init.BREErrorBitGen = CEC_BRE_ERRORBIT_NO_GENERATION;
+  hcec.Init.LBPEErrorBitGen = CEC_LBPE_ERRORBIT_NO_GENERATION;
   hcec.Init.BroadcastMsgNoErrorBitGen = CEC_BROADCASTERROR_ERRORBIT_GENERATION;
   hcec.Init.SignalFreeTimeOption = CEC_SFT_START_ON_TXSOM;
   hcec.Init.ListenMode = CEC_FULL_LISTENING_MODE;
@@ -243,6 +245,38 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
+  * @brief USB Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USB_PCD_Init(void)
+{
+
+  /* USER CODE BEGIN USB_Init 0 */
+
+  /* USER CODE END USB_Init 0 */
+
+  /* USER CODE BEGIN USB_Init 1 */
+
+  /* USER CODE END USB_Init 1 */
+  hpcd_USB_FS.Instance = USB;
+  hpcd_USB_FS.Init.dev_endpoints = 8;
+  hpcd_USB_FS.Init.speed = PCD_SPEED_FULL;
+  hpcd_USB_FS.Init.phy_itface = PCD_PHY_EMBEDDED;
+  hpcd_USB_FS.Init.low_power_enable = DISABLE;
+  hpcd_USB_FS.Init.lpm_enable = DISABLE;
+  hpcd_USB_FS.Init.battery_charging_enable = DISABLE;
+  if (HAL_PCD_Init(&hpcd_USB_FS) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USB_Init 2 */
+
+  /* USER CODE END USB_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -257,21 +291,21 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(HDMI_HPD_EN_GPIO_Port, HDMI_HPD_EN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, HDMI_HPD_EN_Pin|LED_YELLOW_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, HDMI_5V_EN_Pin|LED_RED_Pin|LED_GREEN_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : HDMI_HPD_EN_Pin */
-  GPIO_InitStruct.Pin = HDMI_HPD_EN_Pin;
+  /*Configure GPIO pins : HDMI_HPD_EN_Pin LED_YELLOW_Pin */
+  GPIO_InitStruct.Pin = HDMI_HPD_EN_Pin|LED_YELLOW_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(HDMI_HPD_EN_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : I2C1_SDA_Pin I2C1_SCL_Pin */
-  GPIO_InitStruct.Pin = I2C1_SDA_Pin|I2C1_SCL_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  /*Configure GPIO pins : HDMI_SDA_Pin HDMI_SCL_Pin */
+  GPIO_InitStruct.Pin = HDMI_SDA_Pin|HDMI_SCL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
@@ -287,16 +321,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PB1 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 
 }
 
