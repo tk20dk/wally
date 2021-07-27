@@ -1,9 +1,5 @@
 #include "wally.h"
 
-#include <array>
-#include <cstdio>
-#include <cstring>
-
 
 constexpr auto Feature_Abort                  = 0x00;
 constexpr auto Image_View_On                  = 0x04;
@@ -181,7 +177,7 @@ void TWally::PrintCecMessage( uint8_t const* const Data, uint32_t const Length )
 
   if( Length == 1 )
   {
-    puts( " PING" );
+    printf( " PING\n" );
     return;
   }
 

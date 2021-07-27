@@ -1,6 +1,4 @@
 #include "wally.h"
-#include <array>
-#include <cstdio>
 
 
 extern "C" CEC_HandleTypeDef hcec;

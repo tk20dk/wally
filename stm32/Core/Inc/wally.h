@@ -2,6 +2,7 @@
 #define INC_WALLY_H_
 
 #include "main.h"
+#include <array>
 
 
 class TWally
@@ -21,6 +22,10 @@ private:
   void PrintCecError( uint32_t Error );
   void PrintCecMessage( uint8_t const *Data, uint32_t Length );
   char const* GetLogPrefix();
+
+  void printf( char const* Format, ...  )
+  {
+  }
 
 public:
   bool Hdmi5V;
