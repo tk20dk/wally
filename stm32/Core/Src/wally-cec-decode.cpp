@@ -1,4 +1,5 @@
 #include "wally.h"
+#include <cstdio>
 
 
 constexpr auto Feature_Abort                  = 0x00;

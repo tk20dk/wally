@@ -1,4 +1,8 @@
 #include "wally.h"
+#include "usbd_cdc_if.h"
+#include <cstdio>
+#include <cstdlib>
+#include <cstdarg>
 
 
 extern "C" CEC_HandleTypeDef hcec;
@@ -60,7 +64,7 @@ void TWally::Loop()
 
 void TWally::Setup()
 {
-  puts( "Wally v1.02" );
+  tprintf( "Wally v1.02\n" );
 }
 
 TWally::TWally() :
@@ -97,6 +101,26 @@ char const* TWally::GetLogPrefix()
     snprintf( LogPrefix, std::size( LogPrefix ), "%02lu:%02lu:%02lu:%03lu     ", Hours, Minutes, Seconds, Milliseconds );
 
   return LogPrefix;
+}
+
+void TWally::tprintf( char const* const Format, ...  )
+{
+  static int Length;
+  static char Buffer[ 256 ];
+  va_list Args;
+
+  va_start( Args, Format );
+  Length += vsnprintf( &Buffer[ Length ], sizeof( Buffer ) - Length, Format, Args );
+  va_end( Args );
+
+  if(( Length == std::size( Buffer )) || ( Length && (Buffer[ Length - 1 ] == '\n')))
+  {
+    auto Status = CDC_Transmit_FS( reinterpret_cast<uint8_t*>( Buffer ), static_cast<uint16_t>( Length ));
+    if( Status != USBD_BUSY )
+    {
+      Length = 0;
+    }
+  }
 }
 
 void TWally::SysTick_Handler()
@@ -171,11 +195,14 @@ extern "C" int __io_putchar(int const ch)
 
   if( UartCount == 1 )
   {
-    auto const Status = HAL_UART_Transmit_IT( &huart2, &UartBuffer[ UartTail ], 1 );
-    if( Status != HAL_OK )
+    auto const StatusUart = HAL_UART_Transmit_IT( &huart2, &UartBuffer[ UartTail ], 1 );
+    if( StatusUart != HAL_OK )
     {
       HAL_GPIO_WritePin( LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET );
     }
+
+    auto const StatusUsb = CDC_Transmit_FS( &UartBuffer[ UartTail ], 123 );
+    if( StatusUsb != USBD_BUSY ) {}
   }
 
   return 1;
@@ -196,5 +223,7 @@ extern "C" void HAL_UART_TxCpltCallback( UART_HandleTypeDef *huart )
     {
       HAL_GPIO_WritePin( LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET );
     }
+    auto const StatusUsb = CDC_Transmit_FS( &UartBuffer[ UartTail ], 123 );
+    if( StatusUsb != USBD_BUSY ) {}
   }
 }

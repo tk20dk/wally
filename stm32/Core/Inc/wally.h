@@ -23,9 +23,7 @@ private:
   void PrintCecMessage( uint8_t const *Data, uint32_t Length );
   char const* GetLogPrefix();
 
-  void printf( char const* Format, ...  )
-  {
-  }
+  void tprintf( char const* Format, ...  );
 
 public:
   bool Hdmi5V;
