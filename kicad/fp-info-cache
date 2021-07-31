@@ -1,4 +1,4 @@
-18792968174554943
+18920726431390943
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -81767,9 +81767,23 @@ varistor SIOV
 2
 2
 wally
+HDMI_A_Male_Horizontal
+HDMI A - Male Horizontal
+HDMI Type A
+0
+27
+20
+wally
+PinHeader_1x09_P2.54mm_Vertical
+Through hole straight pin header, 1x09, 2.54mm pitch, single row
+Through hole pin header THT 1x09 2.54mm single row
+0
+9
+9
+wally
 USB_C_Receptacle_HRO_TYPE-C-31-M-12
 USB Type-C receptacle for USB 2.0 and PD, http://www.krhro.com/uploads/soft/180320/1-1P320120243.pdf
 usb usb-c 2.0 pd
 0
 20
-20
+17
