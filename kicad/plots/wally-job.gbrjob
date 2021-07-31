@@ -5,9 +5,9 @@
     {
       "Vendor":      "KiCad",
       "Application": "Pcbnew",
-      "Version":     "5.1.9-73d0e3b20d~88~ubuntu20.04.1"
+      "Version":     "5.1.10-88a1d61d58~90~ubuntu20.04.1"
     },
-    "CreationDate":  "2021-06-05T19:28:38+02:00"
+    "CreationDate":  "2021-07-31T15:59:24+02:00"
   },
   "GeneralSpecs":
   {
@@ -15,7 +15,7 @@
     {
       "Name": "wally",
       "GUID": "77616c6c-792e-46b6-9963-61645f706362",
-      "Revision": "v1.03"
+      "Revision": "v1.04"
     },
     "Size":
     {
